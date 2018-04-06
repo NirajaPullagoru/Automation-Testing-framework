@@ -1,0 +1,16 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "chromedriver": "^2.37.0",
+    "mocha": "^5.0.5",
+    "selenium-server": "^3.11.0",
+    "selenium-standalone": "^6.13.0",
+    "selenium-webdriver": "^4.0.0-alpha.1"
+  },
+  "scripts": {
+    "start": "node framework/executor.js"
+  }
+}
