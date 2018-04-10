@@ -23,14 +23,17 @@ function main() {
                 return keywords.change(newDriver, newBy, "//*[@id='password']", data.password)
             })
             .then(function () {
-                // Waiting because we don't have explicit wat in click keywork to check the disabled status
+                // Waiting because we don't have explicit wat in click keyword to check the disabled status
                 return keywords.wait(newDriver, 5000)
             })
             .then(function () {
                 return keywords.clickusingEnter(newDriver, newBy, "//input[@class='btn btn-success btn-signup full-width']")
             })
             .then(function () {
-                // Waiting because we don't have explicit wat in click keywork to check the disabled status                
+                return keywords.assertVisible(newDriver, newBy, "//*[@id='container']/div/div/header-page/header/div[2]/div/div/div/div[2]/ul/li[6]/span")
+            })
+            .then(function () {
+                // Waiting because we don't have explicit wat in click keyword to check the disabled status                
                 return keywords.wait(newDriver, 3000)
             })
             .then(function () {
@@ -43,21 +46,48 @@ function main() {
                 return keywords.change(newDriver, newBy, "//*[@name='title']", "Testing")
             })
             .then(function () {
+                // Waiting because we don't have explicit wat in click keyword to check the disabled status                
+                return keywords.wait(newDriver, 3000)
+            })
+            .then(function () {
+                return keywords.click(newDriver, newBy, "(//div[@name='tagId'])[1]")
+            })
+            .then(function () {
+                return keywords.switchToFrame(newDriver, newBy, "//div[@id='cke_1_contents']/iframe");
+            })
+            .then(function () {
+                // Waiting because switching to frame takes a while              
+                return keywords.wait(newDriver, 3000)
+            })
+            .then(function () {
+                return keywords.change(newDriver, newBy, "//body[@class='cke_editable cke_editable_themed cke_contents_ltr cke_show_borders']", "Hi, I am performing automation on this page")
+            })
+            .then(function () {
+                // Waiting because switching to frame takes a while                 
+                return keywords.wait(newDriver, 3000)
+            })
+            .then(function () {
+                return keywords.switchToDefault(newDriver);
+            })
+            .then(function () {
+                // Waiting because switching to frame takes a while               
+                return keywords.wait(newDriver, 3000)
+            })
+            .then(function () {
                 return keywords.click(newDriver, newBy, "//*[@id='ngdialog1']/div[2]/div/div/div/div[3]/div/div[2]/button[1]")
             })
-            // Assert inner HTML
             .then(function () {
-                return keywords.assertValue(newDriver, newBy, "//*[contains(text(),'Recaptcha required')]", "Recaptcha required")
+                return keywords.assertValue(newDriver, newBy, "//div[contains(text(),'Recaptcha required')]", "Recaptcha required")
             })
             .then(function () {
-                // Waiting because we don't have explicit wat in click keywork to check the disabled status                
+                // Waiting because we don't have explicit wat in click keyword to check the disabled status                
                 return keywords.wait(newDriver, 3000)
             })
             .then(function () {
                 return keywords.close(newDriver)
             })
             .catch(function (err) {
-                console.log(`Error in main1 : ${err}`)
+                console.log(`Error in main : ${err}`)
             })
     })
 }

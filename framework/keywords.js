@@ -3,6 +3,10 @@ module.exports = function () {
     var stepResult = {};
     var webdriver = require('selenium-webdriver');
     var windowHandlerArray = [];
+    var chai = require('chai');
+    var chaiAsPromised = require('chai-as-promised');
+    chai.use(chaiAsPromised);
+    var expect = chai.expect;
 
     /**
      * 
@@ -17,7 +21,9 @@ module.exports = function () {
         return driver
             .wait(webdriver.until.elementLocated(by.xpath(locator)), 20000, 'Could not locate the child element within the time specified')
             .then(() => {
-                return driver.findElement(by.xpath(locator)).sendKeys(webdriver.Key.ENTER)
+                driver.findElement(by.xpath(locator)).sendKeys(webdriver.Key.ENTER).then(() => {
+                    return ("Click executed")
+                })
             })
     }
 
@@ -25,7 +31,9 @@ module.exports = function () {
         return driver
             .wait(webdriver.until.elementLocated(by.xpath(locator)), 20000, 'Could not locate the child element within the time specified')
             .then(() => {
-                return driver.findElement(by.xpath(locator)).click();
+                driver.findElement(by.xpath(locator)).click().then(() => {
+                    return ("Click executed")
+                })
             })
     }
 
@@ -33,7 +41,9 @@ module.exports = function () {
         return driver
             .wait(webdriver.until.elementLocated(by.xpath(locator)), 20000, 'Could not locate the child element within the time specified')
             .then(() => {
-                return driver.executeScript(" var eveObj = document.querySelector('" + locator + "'); var event = document.createEvent('Events'); event.initEvent('click', true, false);eveObj.dispatchEvent(event)", "")
+                driver.executeScript(" var eveObj = document.querySelector('" + locator + "'); var event = document.createEvent('Events'); event.initEvent('click', true, false);eveObj.dispatchEvent(event)", "").then(() => {
+                    return ("Click executed")
+                })
             })
     }
 
@@ -41,13 +51,16 @@ module.exports = function () {
         return driver
             .wait(webdriver.until.elementLocated(by.xpath(locator)), 20000, 'Could not locate the child element within the time specified')
             .then(() => {
-                return driver.findElement(by.xpath(locator)).sendKeys(value)
+                driver.findElement(by.xpath(locator)).sendKeys(value).then(() => {
+                    return ("Change executed")
+                })
             })
-
     }
 
     this.close = function (driver) {
-        return driver.quit()
+        driver.quit().then(() => {
+            return ("Close browser executed")
+        })
     }
 
     this.assertValue = function (driver, by, locator, expectedValue) {
@@ -56,11 +69,11 @@ module.exports = function () {
                 .wait(webdriver.until.elementLocated(by.xpath(locator)), 20000, 'Could not locate the child element within the time specified')
                 .getAttribute('innerHTML')
                 .then((actualValue) => {
-                    expect(expectedValue).to.equal(actualValue);
+                    expect(expectedValue).to.equal(actualValue)
                     resolve("assertValue");
                 })
                 .catch((err) => {
-                    resolve(err)
+                    reject(err)
                 })
         })
     }
@@ -69,7 +82,32 @@ module.exports = function () {
         return driver
             .wait(webdriver.until.elementLocated(by.xpath(locator)), 20000, 'Could not locate the child element within the time specified')
             .then(() => {
-                return driver.findElement(by.xpath(locator))
+                driver.findElement(by.xpath(locator)).then(() => {
+                    return ("assertVisible executed")
+                })
+            })
+    }
+
+    this.numberofFrames = function (driver, by) {
+        driver.findElements(by.tagName("iframe")).size().then((size) => {
+            return ("size", size)
+        })
+    }
+
+    this.switchToFrame = function (driver, by, locator) {
+        return driver
+            .wait(webdriver.until.elementLocated(by.xpath(locator)), 20000, 'Could not locate the child element within the time specified')
+            .then((elem) => {
+                driver.switchTo().frame(elem).then(() => {
+                    return ("switchToFrame executed")
+                })
+            })
+    }
+
+    this.switchToDefault = function (driver) {
+        return driver.switchTo().defaultContent()
+            .then(() => {
+                return ("switchToDefault executed");
             })
     }
 
